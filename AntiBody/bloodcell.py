@@ -1,3 +1,8 @@
+"""
+Joe O'Regan
+21/09/2018
+"""
+
 import pygame
 from pygame.locals import *
 import random

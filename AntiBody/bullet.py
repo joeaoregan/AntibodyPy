@@ -1,7 +1,11 @@
+"""
+Joe O'Regan
+21/09/2018
+"""
+
 import pygame
 from pygame.locals import *
-import background
-import AntiBody.object as object
+import AntiBody.background as background
 
 BLACK = (0, 0, 0)
 NEXT_FIRE = 0

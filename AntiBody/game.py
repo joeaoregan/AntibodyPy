@@ -1,10 +1,15 @@
+"""
+Joe O'Regan
+21/09/2018
+"""
+
 import pygame
 from pygame.locals import *
 import sys
 import os
 
 import AntiBody.bullet as bullet
-import AntiBody.background as bg, AntiBody.laser as laser, AntiBody.player as player, AntiBody.bloodcell as bloodcell
+import AntiBody.background as bg, AntiBody.player as player, AntiBody.bloodcell as bloodcell
 
 score = 0
 time = 30
@@ -26,6 +31,8 @@ fontName = pygame.font.match_font("comicsansms")
 
 # define colours
 BLACK = (0,0,0,255)
+BLACK_T = (0,0,0,50)
+WHITE = (255,255,255,255)
 
 # Sprites & Images
 bgImage = pygame.image.load("Art/background.png").convert()
@@ -43,10 +50,10 @@ bloodCellList = pygame.sprite.Group()
 
 def drawText(surface, text, size, x, y):
     font = pygame.font.Font(fontName, size)
-    text = font.render(text, True, (255, 255, 255))   # True = text anti-aliased
+    text = font.render(text, True, (255, 255, 255))     # True = text anti-aliased
     textRect = text.get_rect()
     textRect.midtop = (x,y)
-    surface.blit(text, textRect)    # draw text surface at location of text rectangle
+    surface.blit(text, textRect)                        # draw text surface at location of text rectangle
 
 
 def events():
@@ -55,10 +62,33 @@ def events():
             pygame.quit()
             sys.exit()
 
+        if event.type == KEYDOWN and event.key == K_p:
+            pause()
+
+
+def pause():
+    paused = True
+    while paused:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_p:
+                    paused = False
+                elif event.key == pygame.K_ESCAPE:
+                    pygame.quit()
+                    sys.exit()
+
+        # DS.fill(BLACK_T)
+        drawText(DS, "Paused", 60, width/2,(height-120)/2)
+        drawText(DS, "Press P to continue or Esc to quit", 24, width/2, (height-120)/2 - 60)
+        pygame.display.update()
+        CLOCK.tick(5)
+
 
 def input():
     global nextFire
-    # pygame.key.set_repeat(200, 200)
     # Keyboard input
     k = pygame.key.get_pressed()
 
@@ -73,16 +103,13 @@ def input():
 
 def rotate(image, rect, angle):
     """Rotate the image while keeping its center."""
-    # Rotate the original image without modifying it.
-    new_image = pygame.transform.rotate(image, angle)
-    # Get a new rect with the center of the old rect.
-    rect = new_image.get_rect(center=rect.center)
+    new_image = pygame.transform.rotate(image, angle)   # Rotate the original image without modifying it.
+    rect = new_image.get_rect(center=rect.center)       # Get a new rect with the center of the old rect.
     return new_image, rect
 
 
-def spawnBloodCells():
+def spawnGameObjects():
     if len(bloodCellList) < 8:
-        # bloodCell1 = bloodcell.BloodCell(random.rand, 360)
         bloodCell1 = bloodcell.BloodCell()
         bloodCellList.add(bloodCell1)
 
@@ -97,12 +124,6 @@ def update():
         DS.blit(bgImage, (rel_x, 0))
     bg.move()
 
-    # BloodCell
-    # rect = bloodcellImage.get_rect(center=(bloodCell1.x,bloodCell1.y))
-    # bloodCell1.move()
-    # bloodcellImage, rect = rotate(orig_image, rect, bloodCell1.angle)
-    # DS.blit(bloodcellImage, rect)
-
     # Move and Draw Blood Cells
     for bloodCells in bloodCellList:
         bloodCells.move()
@@ -116,10 +137,6 @@ def update():
     for bullets in bulletList:
         bullets.move()
         DS.blit(laserImage, (bullets.x, bullets.y))
-        #if bullets.collisions(rect):
-        #    score += 10
-        #if not bullets.active:
-        #    bulletList.remove(bullets)
 
     # Collisions Bullets and BloodCells
     for bloodCells in bloodCellList:
@@ -145,7 +162,6 @@ def update():
         time -= 1
 
     # Text
-    # DS.blit(text, (width / 2 - text.get_width() // 2, 20 - text.get_height() // 2))
     drawText(DS, "Score: " + str(score), 24, width / 2, 5)
     drawText(DS, "Level: 1", 24, 50, 5)
     drawText(DS, "Time: " + str(time), 24, width - 100, 5)
@@ -157,9 +173,9 @@ def update():
 while True:
     events()
     input()
-    spawnBloodCells()
+    spawnGameObjects()
     update()
 
     pygame.display.update()
     CLOCK.tick(FPS)
-    DS.fill(BLACK)
+    # DS.fill(BLACK)

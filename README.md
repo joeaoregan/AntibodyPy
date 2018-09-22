@@ -7,3 +7,6 @@ Antibody game ported to python from C++
 
 ![AntibodyPy](https://raw.githubusercontent.com/joeaoregan/AntibodyPy/master/Screenshots/screenshot1.jpg "AntibodyPy")
 ###### AntybodyPy
+
+![AntibodyPy: Pause](https://raw.githubusercontent.com/joeaoregan/AntibodyPy/master/Screenshots/screenshot2.jpg "AntibodyPy: Pause")
+###### AntybodyPy - Pause

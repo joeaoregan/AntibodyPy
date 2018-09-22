@@ -1,3 +1,8 @@
+"""
+Joe O'Regan
+21/09/2018
+"""
+
 import pygame
 from pygame.locals import *
 import AntiBody.object as object
@@ -11,11 +16,6 @@ class Player(object.Object):
         self.y = y
         self.velocityX = 0
         self.velocityY = 0
-
-# x, y = 0, 0
-# velocityX, velocityY = 0,0
-
-# SPEED = 5
 
     def input(self):
         # global velocityX, velocityY
