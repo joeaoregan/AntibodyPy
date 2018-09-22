@@ -4,16 +4,45 @@ import sys
 import os
 
 import AntiBody.bullet as bullet
-import background as bg, AntiBody.laser as laser, AntiBody.player as player, AntiBody.bloodcell as bloodcell
-import AntiBody.object as object
+import AntiBody.background as bg, AntiBody.laser as laser, AntiBody.player as player, AntiBody.bloodcell as bloodcell
 
-# print("Test")
 score = 0
+time = 30
+timeChange = 0
 
-# font = pygame.font.SysFont("comicsansms", 24)
+# define display surface
+width, height = 1280, 720
+
+# setup pygame
+pygame.init()
+CLOCK = pygame.time.Clock()
+DS = pygame.display.set_mode((width, height))
+pygame.display.set_caption("Antibody - Scrolling Background")
+FPS = 120
+
+os.environ['SDL_VIDEO_WINDOW_POS'] = "50,50"
+
 fontName = pygame.font.match_font("comicsansms")
+
+# define colours
+BLACK = (0,0,0,255)
+
+# Sprites & Images
+bgImage = pygame.image.load("Art/background.png").convert()
+playerImage = pygame.image.load("Art/Player1Ship.png").convert()
+laserImage = pygame.image.load("Art/LaserGreen2.png").convert()
+bloodcellImage = pygame.image.load("Art/BloodCell.png").convert()
+orig_image = bloodcellImage
+
+player1 = player.Player(playerImage.get_rect().width, bgImage.get_rect().height / 2)
+# bloodCell1 = bloodcell.BloodCell(500,360)
+
+bulletList = pygame.sprite.Group()
+bloodCellList = pygame.sprite.Group()
+
+
 def drawText(surface, text, size, x, y):
-    font = pygame.font.Font(fontName, 24)
+    font = pygame.font.Font(fontName, size)
     text = font.render(text, True, (255, 255, 255))   # True = text anti-aliased
     textRect = text.get_rect()
     textRect.midtop = (x,y)
@@ -26,36 +55,6 @@ def events():
             pygame.quit()
             sys.exit()
 
-
-# define display surface
-width, height = 1280, 720
-
-os.environ['SDL_VIDEO_WINDOW_POS'] = "50,50"
-
-# setup pygame
-pygame.init()
-CLOCK = pygame.time.Clock()
-DS = pygame.display.set_mode((width, height))
-pygame.display.set_caption("Antibody - Scrolling Background")
-FPS = 120
-
-# define colours
-BLACK = (0,0,0,255)
-
-# Sprites & Images
-bgImage = pygame.image.load("Art/background.png").convert()
-playerImage = pygame.image.load("Art/Player1Ship.png").convert()
-laserImage = pygame.image.load("Art/LaserGreen.png").convert()
-bloodcellImage = pygame.image.load("Art/BloodCell.png").convert()
-orig_image = bloodcellImage
-
-player1 = player.Player(playerImage.get_rect().width, bgImage.get_rect().height / 2)
-# bloodCell1 = bloodcell.BloodCell(500,360)
-
-bulletList = pygame.sprite.Group()
-bloodCellList = pygame.sprite.Group()
-
-# nextFire = 0
 
 def input():
     global nextFire
@@ -88,8 +87,8 @@ def spawnBloodCells():
         bloodCellList.add(bloodCell1)
 
 
-def move():
-    global bloodcellImage, score
+def update():
+    global bloodcellImage, score, time, timeChange
 
     # Scrolling Background
     rel_x = bg.x % bgImage.get_rect().width
@@ -140,10 +139,18 @@ def move():
     player1.move()
     DS.blit(playerImage, (player1.x, player1.y))
 
+    # Time
+    if pygame.time.get_ticks() > timeChange and time > 0:
+        timeChange = pygame.time.get_ticks() + 1000
+        time -= 1
+
     # Text
     # DS.blit(text, (width / 2 - text.get_width() // 2, 20 - text.get_height() // 2))
     drawText(DS, "Score: " + str(score), 24, width / 2, 5)
     drawText(DS, "Level: 1", 24, 50, 5)
+    drawText(DS, "Time: " + str(time), 24, width - 100, 5)
+    if time == 0:
+        drawText(DS, "Time Is Up", 60, width/2,(height-120)/2)
 
 
 # Game loop
@@ -151,7 +158,7 @@ while True:
     events()
     input()
     spawnBloodCells()
-    move()
+    update()
 
     pygame.display.update()
     CLOCK.tick(FPS)

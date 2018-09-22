@@ -1,11 +1,8 @@
 import pygame
 from pygame.locals import *
 import random
-import AntiBody.object as object
-# x, y = 1280, 360
-# angle = 0
 
-# class BloodCell(object.Object):
+
 class BloodCell(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
@@ -26,11 +23,11 @@ class BloodCell(pygame.sprite.Sprite):
         self.x -= 3
 
         if self.x < -self.width:
-            # self.x = 1280
             self.active = False
 
         if self.rotate % 2 == 0:
             self.angle += self.rotateSpeed
         else:
             self.angle-=self.rotateSpeed
+
         self.angle %= 360
