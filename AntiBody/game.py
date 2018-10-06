@@ -9,7 +9,7 @@ import sys
 import os
 
 import AntiBody.bullet as bullet
-import AntiBody.background as bg, AntiBody.player as player, AntiBody.bloodcell as bloodcell
+import AntiBody.background as bg, AntiBody.player as player, AntiBody.bloodcell as bloodcell, AntiBody.enemyShip as enemyship, AntiBody.spritesheet as ss
 
 score = 0
 time = 30
@@ -17,6 +17,7 @@ timeChange = 0
 
 # define display surface
 width, height = 1280, 720
+HW, HH = width/2, height/2
 
 # setup pygame
 pygame.init()
@@ -33,6 +34,7 @@ fontName = pygame.font.match_font("comicsansms")
 BLACK = (0,0,0,255)
 BLACK_T = (0,0,0,50)
 WHITE = (255,255,255,255)
+GREY = (100,100,100,255)
 
 # Sprites & Images
 bgImage = pygame.image.load("Art/background.png").convert()
@@ -46,6 +48,12 @@ player1 = player.Player(playerImage.get_rect().width, bgImage.get_rect().height 
 
 bulletList = pygame.sprite.Group()
 bloodCellList = pygame.sprite.Group()
+
+
+s = ss.SpriteSheet("Art/EnemySpriteSheet2.png", 1, 4)
+
+CENTER_HANDLE = 4
+index = 0
 
 
 def drawText(surface, text, size, x, y):
@@ -115,7 +123,7 @@ def spawnGameObjects():
 
 
 def update():
-    global bloodcellImage, score, time, timeChange
+    global bloodcellImage, score, time, timeChange, index
 
     # Scrolling Background
     rel_x = bg.x % bgImage.get_rect().width
@@ -156,10 +164,20 @@ def update():
     player1.move()
     DS.blit(playerImage, (player1.x, player1.y))
 
+
+    # Enemy
+   # s.draw(DS, index % s.totalCells, HW, HH, CENTER_HANDLE)
+   # index += 1  # which frame to draw
+    #s.draw(DS, 10, HW, HH, CENTER_HANDLE)
+
+
+    s.draw(DS, s.animationFPS(8), HW, HH, CENTER_HANDLE)
+
     # Time
     if pygame.time.get_ticks() > timeChange and time > 0:
         timeChange = pygame.time.get_ticks() + 1000
         time -= 1
+
 
     # Text
     drawText(DS, "Score: " + str(score), 24, width / 2, 5)
@@ -167,6 +185,9 @@ def update():
     drawText(DS, "Time: " + str(time), 24, width - 100, 5)
     if time == 0:
         drawText(DS, "Time Is Up", 60, width/2,(height-120)/2)
+
+    # rect(x, y, w, h)
+    pygame.draw.rect(DS, GREY, [0,600,width,120], 0)
 
 
 # Game loop
