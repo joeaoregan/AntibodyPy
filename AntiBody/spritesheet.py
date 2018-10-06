@@ -27,16 +27,15 @@ AREA = W*H
 
 # Initialise display
 pygame.init()
-CLOCK = pygame.time.Clock()
-DS = pygame.display.set_mode((W, H))
-pygame.display.set_caption("Sprite Sheet Test")
-FPS = 6
+#CLOCK = pygame.time.Clock()
+#DS = pygame.display.set_mode((W, H))
+#pygame.display.set_caption("Sprite Sheet Test")
+#FPS = 6
 
 # Colours
 BLACK = (0, 0, 0, 255)
 WHITE = (255,255,255,255)
 NEXT_FRAME = 0
-# cellIndex = 0
 
 
 class SpriteSheet:
@@ -87,26 +86,6 @@ class SpriteSheet:
         cellIndex % s.totalCells
         
         surface.blit(self.sheet, (x + self.handle[handle][0], y + self.handle[handle][1]), self.cells[cellIndex])
-'''
-'''
-s = SpriteSheet("EnemySpriteSheet2.png", 1, 4)
-
-CENTER_HANDLE = 4
-index = 0
-
-# main loop
-
-while True:
-    events()
-
-    s.draw(DS, index % s.totalCells, HW, HH, CENTER_HANDLE)
-    index += 1
-
-    pygame.draw.circle(DS,WHITE,(640, 360), 2, 0)
-
-    pygame.display.update()
-    CLOCK.tick(FPS)
-    DS.fill(BLACK)
 '''
 
 

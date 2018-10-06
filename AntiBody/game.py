@@ -48,6 +48,7 @@ player1 = player.Player(playerImage.get_rect().width, bgImage.get_rect().height 
 
 bulletList = pygame.sprite.Group()
 bloodCellList = pygame.sprite.Group()
+enemyList = pygame.sprite.Group()
 
 
 s = ss.SpriteSheet("Art/EnemySpriteSheet2.png", 1, 4)
@@ -121,6 +122,10 @@ def spawnGameObjects():
         bloodCell1 = bloodcell.BloodCell()
         bloodCellList.add(bloodCell1)
 
+    if len(enemyList) < 2:
+        enemy = enemyship.EnemyShip()
+        enemyList.add(enemy)
+
 
 def update():
     global bloodcellImage, score, time, timeChange, index
@@ -138,8 +143,24 @@ def update():
         rect = bloodcellImage.get_rect(center=(bloodCells.x,bloodCells.y))
         bloodcellImage, rect = rotate(orig_image, rect, bloodCells.angle)
         DS.blit(bloodcellImage, rect)
-        if bloodCells.x < -bloodCells.width:
-            bloodCellList.remove(bloodCells)
+        # Remove from list after they travel off screen (left)
+        #if bloodCells.x < -bloodCells.width:
+        #    bloodCellList.remove(bloodCells)
+
+    # Move and Draw Enemies
+    for enemies in enemyList:
+        enemies.move()
+       # s.draw(DS, s.animationFPS(8), HW, HH, CENTER_HANDLE)
+        s.draw(DS, s.animationFPS(8), enemies.x, enemies.y, CENTER_HANDLE)
+        # Remove if off screen or destroyed
+        if enemies.x < -enemies.width or enemies.active == False:
+            enemyList.remove(enemies)
+        # Collisions
+        for bullets in bulletList:
+            rect = pygame.Rect(enemies.x, enemies.y,s.cellWidth, s.cellHeight)
+            if bullets.collisions(rect):
+                score+=20
+                enemies.active=False
 
     # Move and Draw Bullets
     for bullets in bulletList:
@@ -160,18 +181,11 @@ def update():
                 score += 10
                 bloodCells.active=False
 
+
     # Player
     player1.move()
     DS.blit(playerImage, (player1.x, player1.y))
 
-
-    # Enemy
-   # s.draw(DS, index % s.totalCells, HW, HH, CENTER_HANDLE)
-   # index += 1  # which frame to draw
-    #s.draw(DS, 10, HW, HH, CENTER_HANDLE)
-
-
-    s.draw(DS, s.animationFPS(8), HW, HH, CENTER_HANDLE)
 
     # Time
     if pygame.time.get_ticks() > timeChange and time > 0:

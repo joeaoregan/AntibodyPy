@@ -16,8 +16,8 @@ class EnemyShip(pygame.sprite.Sprite):
         self.y = random.randint(40, 600)
         self.velocityX = 0
         self.velocityY = 0
-        self.width = 100
-        self.height = 55
+        self.width = 120
+        self.height = 50
         self.active = True
 
     def move(self):
