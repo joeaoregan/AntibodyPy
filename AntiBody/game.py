@@ -9,7 +9,7 @@ import sys
 import os
 
 import AntiBody.bullet as bullet
-import AntiBody.background as bg, AntiBody.player as player, AntiBody.bloodcell as bloodcell, AntiBody.enemyShip as enemyship, AntiBody.spritesheet as ss
+import AntiBody.background as bg, AntiBody.player as player, AntiBody.bloodcell as bloodcell, AntiBody.enemyShip as enemyship, AntiBody.spritesheet as ss, AntiBody.explosion as explosion
 
 score = 0
 time = 30
@@ -49,9 +49,11 @@ player1 = player.Player(playerImage.get_rect().width, bgImage.get_rect().height 
 bulletList = pygame.sprite.Group()
 bloodCellList = pygame.sprite.Group()
 enemyList = pygame.sprite.Group()
+explosionList = pygame.sprite.Group()
 
 
-s = ss.SpriteSheet("Art/EnemySpriteSheet2.png", 1, 4)
+enemySpriteSheet = ss.SpriteSheet("Art/EnemySpriteSheet2.png", 1, 4)    # Params: filename, cols, rows
+explosionSpriteSheet = ss.SpriteSheet("Art/Explosion.png", 12, 1)
 
 CENTER_HANDLE = 4
 index = 0
@@ -127,6 +129,11 @@ def spawnGameObjects():
         enemyList.add(enemy)
 
 
+def spawnExplosion(x, y, fps):
+    explosion1 = explosion.Explosion(x, y, fps)
+    explosionList.add(explosion1)
+
+
 def update():
     global bloodcellImage, score, time, timeChange, index
 
@@ -151,16 +158,19 @@ def update():
     for enemies in enemyList:
         enemies.move()
        # s.draw(DS, s.animationFPS(8), HW, HH, CENTER_HANDLE)
-        s.draw(DS, s.animationFPS(8), enemies.x, enemies.y, CENTER_HANDLE)
+        enemySpriteSheet.draw(DS, enemySpriteSheet.animationFPS(8), enemies.x, enemies.y, CENTER_HANDLE)
         # Remove if off screen or destroyed
         if enemies.x < -enemies.width or enemies.active == False:
             enemyList.remove(enemies)
+
         # Collisions
         for bullets in bulletList:
-            rect = pygame.Rect(enemies.x, enemies.y,s.cellWidth, s.cellHeight)
+            rect = pygame.Rect(enemies.x, enemies.y, enemySpriteSheet.cellWidth, enemySpriteSheet.cellHeight)
             if bullets.collisions(rect):
                 score+=20
+                spawnExplosion(enemies.x,enemies.y, 10)
                 enemies.active=False
+
 
     # Move and Draw Bullets
     for bullets in bulletList:
@@ -180,6 +190,15 @@ def update():
             if bullets.collisions(rect):
                 score += 10
                 bloodCells.active=False
+
+    # Explosion update
+    for explosions in explosionList:
+        explosions.move()
+        # Explosion
+        # explosionSpriteSheet.draw(DS, explosionSpriteSheet.animationFPS(10), 96, 96, CENTER_HANDLE)
+        explosionSpriteSheet.draw(DS, explosionSpriteSheet.animationFPS(10), explosions.x, explosions.y, CENTER_HANDLE)
+        if not explosions.active:
+            explosionList.remove(explosions)
 
 
     # Player

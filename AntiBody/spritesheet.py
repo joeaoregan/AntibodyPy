@@ -35,7 +35,7 @@ pygame.init()
 # Colours
 BLACK = (0, 0, 0, 255)
 WHITE = (255,255,255,255)
-NEXT_FRAME = 0
+#NEXT_FRAME = 0
 
 
 class SpriteSheet:
@@ -46,6 +46,7 @@ class SpriteSheet:
         self.rows = rows
         self.totalCells = cols*rows
         self.currentFrame = 0
+        self.nextFrameTime = 0
 
         self.rect = self.sheet.get_rect()
         w = self.cellWidth = self.rect.width/cols
@@ -60,18 +61,16 @@ class SpriteSheet:
              (0,-h),(-hw,-h),(-w,-h),])
 
     def animationFPS(self, perSecond):
-
         rate = 1000 / perSecond
 
-        global NEXT_FRAME
-        if pygame.time.get_ticks() > NEXT_FRAME:
-            NEXT_FRAME = pygame.time.get_ticks() + rate
+        #global NEXT_FRAME
+        if pygame.time.get_ticks() > self.nextFrameTime:
+            self.nextFrameTime = pygame.time.get_ticks() + rate
             self.currentFrame+=1
 
         return self.currentFrame % self.totalCells
 
     def draw(self, surface, cellIndex, x, y, handle = 0):
-        # index % s.totalCells
         surface.blit(self.sheet, (x + self.handle[handle][0], y + self.handle[handle][1]), self.cells[cellIndex])
 '''
     def draw(self, surface, perSecond, x, y, handle = 0):
