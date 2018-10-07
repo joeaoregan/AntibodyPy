@@ -12,12 +12,12 @@ class EnemyShip(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
 
-        self.x = 1280 + random.randrange(100,1000,75)
-        self.y = random.randint(40, 600)
-        self.velocityX = 0
-        self.velocityY = 0
         self.width = 120
         self.height = 50
+        self.x = 1280 + random.randrange(100,1000,75)
+        self.y = random.randint(40, 600-self.height)
+        self.velocityX = 0
+        self.velocityY = 0
         self.active = True
 
     def move(self):

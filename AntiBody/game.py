@@ -196,7 +196,8 @@ def update():
         explosions.move()
         # Explosion
         # explosionSpriteSheet.draw(DS, explosionSpriteSheet.animationFPS(10), 96, 96, CENTER_HANDLE)
-        explosionSpriteSheet.draw(DS, explosionSpriteSheet.animationFPS(10), explosions.x, explosions.y, CENTER_HANDLE)
+        # explosionSpriteSheet.draw(DS, explosionSpriteSheet.animationFPS(10), explosions.x, explosions.y, CENTER_HANDLE)   # same frame for all explosions
+        explosionSpriteSheet.draw(DS, explosions.currentFrame, explosions.x, explosions.y, CENTER_HANDLE)                   # each explosion has its own animation frame
         if not explosions.active:
             explosionList.remove(explosions)
 
@@ -232,4 +233,4 @@ while True:
 
     pygame.display.update()
     CLOCK.tick(FPS)
-    # DS.fill(BLACK)
+    # DS.fill(BLACK)    # Remove to see screen paused

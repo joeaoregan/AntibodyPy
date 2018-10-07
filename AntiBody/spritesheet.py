@@ -51,10 +51,11 @@ class SpriteSheet:
         self.rect = self.sheet.get_rect()
         w = self.cellWidth = self.rect.width/cols
         h = self.cellHeight = self.rect.height/rows
-        hw, hh = self.cellCenter = (w/2,h/2)
+        hw, hh = self.cellCenter = (w/2,h/2)    #half the width / height
 
         self.cells = list([(index % cols * w, index % rows * h, w, h) for index in range(self.totalCells)])
 
+        # handle is an offset to the x/y coordinate
         self.handle = list([
             (0,0),(-hw,0), (-w,0),
              (0,-hh),(-hw,-hh),(-w,-hh),

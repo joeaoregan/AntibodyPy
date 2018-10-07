@@ -32,5 +32,7 @@ class Explosion(pygame.sprite.Sprite):
             self.currentFrame+=1
 
         # If the animation has started and current frame is the last frame, destroy the animation
-        if self.currentFrame > 0 and self.currentFrame % NUM_ANIMATION_FRAMES == 0:
+        # if self.currentFrame > 0 and self.currentFrame % NUM_ANIMATION_FRAMES == 0:   # shows 1st frame again
+        # if self.currentFrame > 0 and self.currentFrame % (NUM_ANIMATION_FRAMES-1) == 0:   # shows first few frames
+        if self.currentFrame == (NUM_ANIMATION_FRAMES-1):
             self.active = False
