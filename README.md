@@ -1,11 +1,12 @@
 # AntibodyPy
 ## Python version of Antibody C++ game using pygame
 ### Joe O'Regan
-### A00258304
+
+---
 
 Antibody game ported to python from C++
 
-### Versions:
+### Other Versions:
 
 1. [Antibody: Original Version (Journey to the Center of My Headache)](https://github.com/joeaoregan/LIT-Yr3-Project-Antibody/tree/master/AntibodyV1-JourneyToTheCenterOfMyHeadache "Antibody: Original Title")
 2. [Antibody: Games Fleadh 2017 Entry](https://github.com/joeaoregan/LIT-Yr3-Project-Antibody/tree/master/AntibodyV2-GamesFleadhEntry "Antibody: Games Fleadh 2017 Entry")
