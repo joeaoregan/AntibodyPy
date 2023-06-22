@@ -4,7 +4,9 @@
 
 ---
 
-### PyCharm:
+### Setup:
+
+## PyCharm:
 
 ```
 File > Settings > Project > Python Interpreter
@@ -15,10 +17,13 @@ search for "pygame"
 Install Package
 ```
 
-### VSCode:
+## VSCode:
 
 Kind of broken
 
+---
+
+## About:
 
 Antibody game ported to python from C++
 
