@@ -124,12 +124,12 @@ def spawnBullet(x, y):
     game_objects.append(bullet.Bullet(x, y))
 
 
-
 def spawnEnemy():
     # if len(enemyList) < 2:
     #     enemy = enemyShip.EnemyShip()
     #     enemyList.add(enemy)
-    game_objects.append(enemyShip.EnemyShip())
+    if enemyShip.EnemyShip.count < 2:
+        game_objects.append(enemyShip.EnemyShip())
 
 
 def spawnExplosion(x, y, fps):
@@ -149,6 +149,9 @@ def init():
 
     for i in range(8):
         game_objects.append(bloodcell.BloodCell())
+
+    game_objects.append(enemyShip.EnemyShip())
+    game_objects.append(enemyShip.EnemyShip())
 
     # for obj in game_objects:
         # print(type(obj))
