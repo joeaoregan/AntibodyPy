@@ -1,34 +1,44 @@
 """
-Joe O'Regan
-21/09/2018
+Enemy Ship Class
+
+@Author: Joe O'Regan
+@Date: 21/09/2018
 """
+
+__author__ = "Joe O'Regan"
+__date__ = '22/06/2023'
 
 import pygame
 from pygame.locals import *
 import sys
-import os
+# import os
 
-import AntiBody.bullet as bullet
-import AntiBody.background as bg, AntiBody.player as player, AntiBody.bloodcell as bloodcell, AntiBody.enemyShip as enemyship, AntiBody.spritesheet as ss, AntiBody.explosion as explosion
+import bullet
+import background
+import player
+import bloodcell
+import enemyShip
+import spritesheet as ss
+import explosion
 
+
+FPS = 120
+
+# define display surface
+WIDTH, HEIGHT = 1280, 720
+HW, HH = WIDTH/2, HEIGHT/2
+
+game_objects = []
+
+PAUSED = False
 score = 0
 time = 30
 timeChange = 0
 
-# define display surface
-width, height = 1280, 720
-HW, HH = width/2, height/2
+FONT = pygame.font.match_font("comicsansms")
 
-# setup pygame
-pygame.init()
 CLOCK = pygame.time.Clock()
-DS = pygame.display.set_mode((width, height))
-pygame.display.set_caption("Antibody - Scrolling Background")
-FPS = 120
-
-os.environ['SDL_VIDEO_WINDOW_POS'] = "50,50"
-
-fontName = pygame.font.match_font("comicsansms")
+DS = pygame.display.set_mode((WIDTH, HEIGHT))
 
 # define colours
 BLACK = (0,0,0,255)
@@ -36,124 +46,155 @@ BLACK_T = (0,0,0,50)
 WHITE = (255,255,255,255)
 GREY = (100,100,100,255)
 
-# Sprites & Images
-bgImage = pygame.image.load("Art/background.png").convert()
-playerImage = pygame.image.load("Art/Player1Ship.png").convert()
-laserImage = pygame.image.load("Art/LaserGreen2.png").convert()
-bloodcellImage = pygame.image.load("Art/BloodCell.png").convert()
-orig_image = bloodcellImage
-
-player1 = player.Player(playerImage.get_rect().width, bgImage.get_rect().height / 2)
-# bloodCell1 = bloodcell.BloodCell(500,360)
-
-bulletList = pygame.sprite.Group()
-bloodCellList = pygame.sprite.Group()
-enemyList = pygame.sprite.Group()
-explosionList = pygame.sprite.Group()
-
-
-enemySpriteSheet = ss.SpriteSheet("Art/EnemySpriteSheet2.png", 1, 4)    # Params: filename, cols, rows
-explosionSpriteSheet = ss.SpriteSheet("Art/Explosion.png", 12, 1)
-
 CENTER_HANDLE = 4
-index = 0
 
 
-def drawText(surface, text, size, x, y):
-    font = pygame.font.Font(fontName, size)
+def exit_game():
+    """Exit the game"""
+    pygame.quit()
+    sys.exit()
+
+
+def draw_text(surface, text, size, x, y):
+    """Draw text at coordinates x,y"""
+    font = pygame.font.Font(FONT, size)
     text = font.render(text, True, (255, 255, 255))     # True = text anti-aliased
-    textRect = text.get_rect()
-    textRect.midtop = (x,y)
-    surface.blit(text, textRect)                        # draw text surface at location of text rectangle
+    text_rect = text.get_rect()
+    text_rect.midtop = (x,y)
+    surface.blit(text, text_rect)                        # draw text surface at location of text rectangle
 
 
 def events():
+    """Handle game events"""
     for event in pygame.event.get():
         if event.type == QUIT or (event.type == KEYDOWN and event.key == K_ESCAPE):
-            pygame.quit()
-            sys.exit()
+            exit_game()
 
         if event.type == KEYDOWN and event.key == K_p:
             pause()
 
 
 def pause():
-    paused = True
-    while paused:
+    """Pause state"""
+    global PAUSED
+    PAUSED = True
+
+    while PAUSED:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                pygame.quit()
+                exit_game()
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_p:
-                    paused = False
+                    PAUSED = False
                 elif event.key == pygame.K_ESCAPE:
-                    pygame.quit()
-                    sys.exit()
+                    exit_game()
+            if event.type == QUIT:
+                exit_game()
 
-        # DS.fill(BLACK_T)
-        drawText(DS, "Paused", 60, width/2,(height-120)/2)
-        drawText(DS, "Press P to continue or Esc to quit", 24, width/2, (height-120)/2 - 60)
+        ### DS.fill(BLACK_T)
+        draw_text(DS, "Paused", 60, HW,(HEIGHT-120)/2)
+        draw_text(DS, "Press P to continue or Esc to quit", 24, HW, (HEIGHT-120)/2 - 60)
         pygame.display.update()
         CLOCK.tick(5)
 
 
-def input():
-    global nextFire
-    # Keyboard input
-    k = pygame.key.get_pressed()
+def handle_input():
+    # global nextFire  # unused
+    k = pygame.key.get_pressed()  # Keyboard input
 
-    # player.input()
-    player1.input()
+    for obj in game_objects:
+        if obj.input() == "Fire":
+            # obj.fire()
+            spawnBullet(obj.x, obj.y + (obj.image.get_rect().height / 2))
 
+    # if k[K_SPACE] and pygame.time.get_ticks() > bullet.NEXT_FIRE:
+    #     spawnBullet(10, 360)
+    #     bullet.NEXT_FIRE = pygame.time.get_ticks() + 200
+
+'''
     if k[K_SPACE] and pygame.time.get_ticks() > bullet.NEXT_FIRE:
         bullet1 = bullet.Bullet(player1.x, player1.y + (playerImage.get_rect().height / 2))
         bulletList.add(bullet1)
         bullet.NEXT_FIRE = pygame.time.get_ticks() + 200
+'''
 
 
-def rotate(image, rect, angle):
-    """Rotate the image while keeping its center."""
-    new_image = pygame.transform.rotate(image, angle)   # Rotate the original image without modifying it.
-    rect = new_image.get_rect(center=rect.center)       # Get a new rect with the center of the old rect.
-    return new_image, rect
+def spawnBullet(x, y):
+    game_objects.append(bullet.Bullet(x, y))
 
 
-def spawnGameObjects():
-    if len(bloodCellList) < 8:
-        bloodCell1 = bloodcell.BloodCell()
-        bloodCellList.add(bloodCell1)
 
-    if len(enemyList) < 2:
-        enemy = enemyship.EnemyShip()
-        enemyList.add(enemy)
+def spawnEnemy():
+    # if len(enemyList) < 2:
+    #     enemy = enemyShip.EnemyShip()
+    #     enemyList.add(enemy)
+    game_objects.append(enemyShip.EnemyShip())
 
 
 def spawnExplosion(x, y, fps):
-    explosion1 = explosion.Explosion(x, y, fps)
-    explosionList.add(explosion1)
+    # explosion1 = explosion.Explosion(x, y, fps)
+    # explosionList.add(explosion1)
+    game_objects.append(explosion.Explosion(x, y, fps))  # Spawn explosion
+
+
+def init():
+    bg1 = background.Background()
+    bg2 = background.Background(x=WIDTH)
+    player1 = player.Player()
+
+    game_objects.append(bg1)
+    game_objects.append(bg2)
+    game_objects.append(player1)
+
+    for i in range(8):
+        game_objects.append(bloodcell.BloodCell())
+
+    # for obj in game_objects:
+        # print(type(obj))
+        # print(obj.__class__.__name__)
 
 
 def update():
-    global bloodcellImage, score, time, timeChange, index
+    global score, time, timeChange
 
-    # Scrolling Background
-    rel_x = bg.x % bgImage.get_rect().width
-    DS.blit(bgImage, (rel_x - bgImage.get_rect().width, 0))
-    if rel_x < width:
-        DS.blit(bgImage, (rel_x, 0))
-    bg.move()
+    pygame.display.update()
+    CLOCK.tick(FPS)
 
-    # Move and Draw Blood Cells
-    for bloodCells in bloodCellList:
-        bloodCells.move()
-        rect = bloodcellImage.get_rect(center=(bloodCells.x,bloodCells.y))
-        bloodcellImage, rect = rotate(orig_image, rect, bloodCells.angle)
-        DS.blit(bloodcellImage, rect)
-        # Remove from list after they travel off screen (left)
-        #if bloodCells.x < -bloodCells.width:
-        #    bloodCellList.remove(bloodCells)
+    for obj in game_objects:
+        obj.move()  # Player, etc.
+        # Collisions
+        for obstacle in game_objects:
+            if obstacle is obj:
+                # print("obj",obj.__class__.__name__,"is obstacle")
+                continue
 
+            if obstacle.__class__.__name__ in ['BloodCell', 'Enemy']:
+                # print("player 1 collision check", obstacle.__class__.__name__)
+                # rect = pygame.Rect(obstacle.x, obstacle.y, obstacle.cellWidth, obstacle.cellHeight)
+
+                if obstacle.__class__.__name__ == "BloodCell":
+                    if obj.__class__.__name__ == "Player" or obj.__class__.__name__ == "Bullet":
+                        # rect = obstacle.get_image().get_rect(center=(bloodCells.x, bloodCells.y))
+                        if obj.collision(obstacle.get_rect()):
+                            if obstacle.active:
+                                score += 10
+                            obstacle.active = False
+
+
+    # Time
+    if pygame.time.get_ticks() > timeChange and time > 0:
+        timeChange = pygame.time.get_ticks() + 1000
+        time -= 1
+
+
+def collisions():
+    pass
+
+
+'''
+#def update():
+#    global score, time, timeChange
     # Move and Draw Enemies
     for enemies in enemyList:
         enemies.move()
@@ -170,17 +211,9 @@ def update():
                 score+=20
                 spawnExplosion(enemies.x,enemies.y, 10)
                 enemies.active=False
-
-
-    # Move and Draw Bullets
-    for bullets in bulletList:
-        bullets.move()
-        DS.blit(laserImage, (bullets.x, bullets.y))
-
+   
     # Collisions Bullets and BloodCells
     for bloodCells in bloodCellList:
-        if bloodCells.x < -bloodCells.width or not bloodCells.active:
-            bloodCellList.remove(bloodCells)
 
         for bullets in bulletList:
             if not bullets.active:
@@ -194,43 +227,46 @@ def update():
     # Explosion update
     for explosions in explosionList:
         explosions.move()
-        # Explosion
-        # explosionSpriteSheet.draw(DS, explosionSpriteSheet.animationFPS(10), 96, 96, CENTER_HANDLE)
-        # explosionSpriteSheet.draw(DS, explosionSpriteSheet.animationFPS(10), explosions.x, explosions.y, CENTER_HANDLE)   # same frame for all explosions
+        ### Explosion
+        ### explosionSpriteSheet.draw(DS, explosionSpriteSheet.animationFPS(10), 96, 96, CENTER_HANDLE)
+        ### explosionSpriteSheet.draw(DS, explosionSpriteSheet.animationFPS(10), explosions.x, explosions.y, CENTER_HANDLE)   # same frame for all explosions
         explosionSpriteSheet.draw(DS, explosions.currentFrame, explosions.x, explosions.y, CENTER_HANDLE)                   # each explosion has its own animation frame
         if not explosions.active:
             explosionList.remove(explosions)
+'''
 
 
-    # Player
-    player1.move()
-    DS.blit(playerImage, (player1.x, player1.y))
+def draw():
+    """Draw the game objects"""
+    # if PAUSED:
+    DS.fill(BLACK)  # Clear the screen
 
-
-    # Time
-    if pygame.time.get_ticks() > timeChange and time > 0:
-        timeChange = pygame.time.get_ticks() + 1000
-        time -= 1
-
+    for obj in game_objects:
+        obj.draw()  # Player, etc.
 
     # Text
-    drawText(DS, "Score: " + str(score), 24, width / 2, 5)
-    drawText(DS, "Level: 1", 24, 50, 5)
-    drawText(DS, "Time: " + str(time), 24, width - 100, 5)
+    draw_text(DS, "Score: " + str(score), 24, HW, 5)
+    draw_text(DS, "Level: 1", 24, 50, 5)
+    draw_text(DS, "Time: " + str(time), 24, WIDTH - 100, 5)
     if time == 0:
-        drawText(DS, "Time Is Up", 60, width/2,(height-120)/2)
-
-    # rect(x, y, w, h)
-    pygame.draw.rect(DS, GREY, [0,600,width,120], 0)
+        draw_text(DS, "Time Is Up", 60, HW, (HEIGHT-120)/2)
+    pygame.draw.rect(DS, GREY, [0, 600, WIDTH, 120], 0)
 
 
-# Game loop
-while True:
-    events()
-    input()
-    spawnGameObjects()
-    update()
+def main():
+    pygame.display.set_caption("Antibody - Scrolling Background")
+    # os.environ['SDL_VIDEO_WINDOW_POS'] = "50,50"
 
-    pygame.display.update()
-    CLOCK.tick(FPS)
-    # DS.fill(BLACK)    # Remove to see screen paused
+    init()
+
+    while True:  # Game loop
+        events()
+        handle_input()
+        update()
+        draw()
+
+
+if __name__ == '__main__':
+    pygame.init()
+    main()
+    exit_game()

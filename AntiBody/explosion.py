@@ -1,7 +1,12 @@
 """
-Joe O'Regan
-07/10/2018
+Animated Explosion Class
+
+@Author: Joe O'Regan
+@Date: 07/10/2018
 """
+
+__author__ = "Joe O'Regan"
+__date__ = '22/06/2023'
 
 import pygame
 from pygame.locals import *
@@ -36,3 +41,6 @@ class Explosion(pygame.sprite.Sprite):
         # if self.currentFrame > 0 and self.currentFrame % (NUM_ANIMATION_FRAMES-1) == 0:   # shows first few frames
         if self.currentFrame == (NUM_ANIMATION_FRAMES-1):
             self.active = False
+
+    # explosionList = pygame.sprite.Group()
+    # explosionSpriteSheet = ss.SpriteSheet("Art/Explosion.png", 12, 1)

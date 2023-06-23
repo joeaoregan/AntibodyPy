@@ -1,11 +1,17 @@
 """
-Joe O'Regan
-21/09/2018
+Enemy Ship Class
+
+@Author: Joe O'Regan
+@Date: 21/09/2018
 """
+
+__author__ = "Joe O'Regan"
+__date__ = '22/06/2023'
 
 import pygame
 from pygame.locals import *
 import random
+
 
 
 class EnemyShip(pygame.sprite.Sprite):
@@ -26,3 +32,6 @@ class EnemyShip(pygame.sprite.Sprite):
 
         if self.x < -self.width:
             self.active = False
+
+# enemyList = pygame.sprite.Group()
+# enemySpriteSheet = ss.SpriteSheet("Art/EnemySpriteSheet2.png", 1, 4)    # Params: filename, cols, rows

@@ -3,7 +3,7 @@ Joe O'Regan
 06/10/2018
 
 Python Pygame Tutorial - Sprite Sheets
-https://www.youtube.com/watch?v=mfX3XQv9lnI
+@Link: https://www.youtube.com/watch?v=mfX3XQv9lnI
 """
 
 import pygame
@@ -17,7 +17,7 @@ def events():
     for event in pygame.event.get():
         if event.type == QUIT or (event.type == KEYDOWN and event.key == K_ESCAPE):
             pygame.quit()
-            sys.exit
+            # sys.exit
 
 
 # define display surface
