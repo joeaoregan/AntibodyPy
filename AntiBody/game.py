@@ -18,7 +18,7 @@ import background
 import player
 import bloodcell
 import enemyShip
-import spritesheet as ss
+# import spritesheet as ss
 import explosion
 
 
@@ -124,12 +124,10 @@ def spawnBullet(x, y):
     game_objects.append(bullet.Bullet(x, y))
 
 
-def spawnEnemy():
-    # if len(enemyList) < 2:
-    #     enemy = enemyShip.EnemyShip()
-    #     enemyList.add(enemy)
-    if enemyShip.EnemyShip.count < 2:
-        game_objects.append(enemyShip.EnemyShip())
+def spawnEnemy(amount=1):
+    for count in range(amount):
+        if enemyShip.EnemyShip.count < 2:
+            game_objects.append(enemyShip.EnemyShip())
 
 
 def spawnExplosion(x, y, fps):
@@ -150,8 +148,9 @@ def init():
     for i in range(8):
         game_objects.append(bloodcell.BloodCell())
 
-    game_objects.append(enemyShip.EnemyShip())
-    game_objects.append(enemyShip.EnemyShip())
+    #game_objects.append(enemyShip.EnemyShip())
+    #game_objects.append(enemyShip.EnemyShip())
+    spawnEnemy(2)
 
     # for obj in game_objects:
         # print(type(obj))
@@ -163,6 +162,8 @@ def update():
 
     pygame.display.update()
     CLOCK.tick(FPS)
+
+    spawnEnemy()
 
     for obj in game_objects:
         obj.move()  # Player, etc.
@@ -227,18 +228,7 @@ def collisions():
             if bullets.collisions(rect):
                 score += 10
                 bloodCells.active=False
-
-    # Explosion update
-    for explosions in explosionList:
-        explosions.move()
-        ### Explosion
-        ### explosionSpriteSheet.draw(DS, explosionSpriteSheet.animationFPS(10), 96, 96, CENTER_HANDLE)
-        ### explosionSpriteSheet.draw(DS, explosionSpriteSheet.animationFPS(10), explosions.x, explosions.y, CENTER_HANDLE)   # same frame for all explosions
-        explosionSpriteSheet.draw(DS, explosions.currentFrame, explosions.x, explosions.y, CENTER_HANDLE)                   # each explosion has its own animation frame
-        if not explosions.active:
-            explosionList.remove(explosions)
 '''
-
 
 def draw():
     """Draw the game objects"""

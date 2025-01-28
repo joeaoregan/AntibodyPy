@@ -25,22 +25,35 @@ class EnemyShip(object.Object):
         print("Enemy destroyed. Total Left:",EnemyShip.count)
 
     def __init__(self):
-        super().__init__(image_src="Art/EnemySpriteSheet2.png")
-        # self.width = 120
-        # self.height = 50
-        self.x = 1280 + random.randrange(100,1000,75)
+        super().__init__(image_src="Art/EnemySpriteSheet2.png", rows=4, fps=5,speed=3)
+        
+        self.x = int(1280 + random.randrange(100,1000,75))
         self.y = random.randint(40, 600-self.height)
-        # self.velocityX = 0
-        # self.velocityY = 0
-        # self.active = True
+        
         EnemyShip.count += 1
+        print("Enemy Ship Count: ", EnemyShip.count)
 
     def move(self):
         # global x, angle
-        self.x -= 3
+        self.x -= self.speed
+        #self.x -= 3
 
-        if self.x < -self.width:
+        if self.x < -self.width and self.active == True:
             self.active = False
+            EnemyShip.count-=1
+            print("Enemy Ship Out Of Range - Count: ", EnemyShip.count)
+
+
+        if pygame.time.get_ticks() > self.nextFrameTime:
+            self.nextFrameTime = pygame.time.get_ticks() + self.rate
+            self.currentFrame+=1
+            if self.currentFrame > (self.totalCells-1):
+                self.currentFrame = 0
+
+            
+    def draw(self):
+        if (self.active):
+            self.DS.blit(self.image, (self.x, self.y), self.cells[self.currentFrame])
 
     @staticmethod
     def increment(num):

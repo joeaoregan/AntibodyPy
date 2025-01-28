@@ -37,8 +37,8 @@ class BloodCell(object.Object):
         self.velocityX = 0
         self.velocityY = 0
         self.angle = random.randint(0,180)
-        self.width = 100
-        self.height = 55
+        # self.width = 100
+        # self.height = 55
         self.active = True
         self.rotate = random.randint(0,2)
         self.rotateSpeed = random.uniform(0.5, 3.0)

@@ -29,12 +29,6 @@ class Bullet(object.Object):
 
     def __init__(self, x, y):
         super().__init__(x, y, image_src="Art/LaserGreen2.png")
-
-        #self.width = 100
-        #self.height = 47
-
-        #self.image = pygame.Surface([4,10])
-        #self.image.fill(BLACK)
         laserFX.play()
 
     def collision(self, rect):
