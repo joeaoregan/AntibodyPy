@@ -15,6 +15,10 @@ import object
 
 NUM_ANIMATION_FRAMES = 12           # number of cells in the animation sprite sheet
 
+explosionFX = pygame.mixer.Sound('Audio/explosion.wav')
+#splashFX = pygame.mixer.Sound('Audio/splash.wav')
+
+
 # class Explosion(pygame.sprite.Sprite):
 class Explosion(object.Object):
     def __del__(self):
@@ -23,6 +27,7 @@ class Explosion(object.Object):
 
     def __init__(self, x, y, fps):
         super().__init__(x, y, image_src="Art/Explosion.png", cols=12, fps=fps)
+        explosionFX.play()
 
     def move(self):
         global NUM_ANIMATION_FRAMES

@@ -18,7 +18,7 @@ NEXT_FIRE = 0
 
 pygame.init()
 laserFX = pygame.mixer.Sound('Audio/laser1.wav')
-explosionFX = pygame.mixer.Sound('Audio/explosion.wav')
+#explosionFX = pygame.mixer.Sound('Audio/explosion.wav')
 
 
 #class Bullet(pygame.sprite.Sprite):
@@ -36,7 +36,7 @@ class Bullet(object.Object):
         if self.x < rect.left + rect.width and self.x + self.width > rect.left and self.y < rect.top + rect.height and self.y + self.height > rect.top:
             self.explosion = True
             self.active = False
-            explosionFX.play()
+            #explosionFX.play()
             return True
             # del self
         return False

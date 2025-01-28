@@ -106,7 +106,7 @@ def handle_input():
     for obj in game_objects:
         if obj.input() == "Fire":
             # obj.fire()
-            spawnBullet(obj.x, obj.y + (obj.image.get_rect().height / 2))
+            spawnBullet(obj.x+50, obj.y + (obj.image.get_rect().height / 2))
 
     # if k[K_SPACE] and pygame.time.get_ticks() > bullet.NEXT_FIRE:
     #     spawnBullet(10, 360)
@@ -173,7 +173,7 @@ def update():
                 # print("obj",obj.__class__.__name__,"is obstacle")
                 continue
 
-            if obstacle.__class__.__name__ in ['BloodCell', 'Enemy']:
+            if obstacle.__class__.__name__ in ['BloodCell', 'EnemyShip']:
                 # print("player 1 collision check", obstacle.__class__.__name__)
                 # rect = pygame.Rect(obstacle.x, obstacle.y, obstacle.cellWidth, obstacle.cellHeight)
 
@@ -187,6 +187,21 @@ def update():
                             spawnExplosion(obstacle.x,obstacle.y, 10)
                             if obj.__class__.__name__ == "Player":
                                 obj.health -= 2
+                
+                if obstacle.__class__.__name__ == "EnemyShip":
+                    if obj.__class__.__name__ == "Player":
+                        if obj.collision(obstacle.get_rect()):
+                            obj.health-=5
+                            obstacle.active = False
+                            spawnExplosion(obstacle.x,obstacle.y, 10)
+                    if obj.__class__.__name__ == "Bullet":
+                        if obj.collision(obstacle.get_rect()):
+                            score += 10
+                            obstacle.active = False   
+                            spawnExplosion(obstacle.x,obstacle.y, 10)      
+
+                if obstacle.active == False:           
+                    game_objects.remove(obstacle)
 
 
     # Time
