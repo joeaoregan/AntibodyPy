@@ -185,6 +185,8 @@ def update():
                                 score += 10
                             obstacle.active = False
                             spawnExplosion(obstacle.x,obstacle.y, 10)
+                            if obj.__class__.__name__ == "Player":
+                                obj.health -= 2
 
 
     # Time

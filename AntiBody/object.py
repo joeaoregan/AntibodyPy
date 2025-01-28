@@ -24,6 +24,7 @@ class Object(pygame.sprite.Sprite):
         self.y = y
         self.velocityX = 0
         self.velocityY = 0
+        self.health = 100
 
         self.image = pygame.image.load(image_src).convert()
         self.cols = cols

@@ -25,10 +25,7 @@ class Player(object.Object):
         self.score = 0
         self.nextFire = 0
         self.firing = False
-        # self.x = x
-        # self.y = y
-        # self.velocityX = 0
-        # self.velocityY = 0
+        self.health = 100
 
     def input(self):
         # global velocityX, velocityY
@@ -73,6 +70,10 @@ class Player(object.Object):
 
     def draw(self):
         super().draw()
+        pygame.draw.rect(object.Object.DS, (0,0,0,255), Rect(self.x-1,self.y-11,102,12))
+        pygame.draw.rect(object.Object.DS, (255,0,0,255), Rect(self.x,self.y-10,100,10))
+        pygame.draw.rect(object.Object.DS, (0,255,0,255), Rect(self.x,self.y-10,self.health,10))
+        
 
     def get_width(self):
         return super().get_width()
