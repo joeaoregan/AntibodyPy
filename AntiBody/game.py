@@ -183,6 +183,7 @@ def update():
                             if obstacle.active:
                                 score += 10
                             obstacle.active = False
+                            spawnExplosion(obstacle.x,obstacle.y, 10)
 
 
     # Time
