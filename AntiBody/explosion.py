@@ -12,11 +12,14 @@ import pygame
 from pygame.locals import *
 import random
 import object
+from enum import Enum
+Animation = Enum('Animation', [('NORMAL', 1), ('SPLASH', 2)])
 
 NUM_ANIMATION_FRAMES = 12           # number of cells in the animation sprite sheet
 
 explosionFX = pygame.mixer.Sound('Audio/explosion.wav')
-#splashFX = pygame.mixer.Sound('Audio/splash.wav')
+splashFX = pygame.mixer.Sound('Audio/splash.wav')
+
 
 
 # class Explosion(pygame.sprite.Sprite):
@@ -25,9 +28,13 @@ class Explosion(object.Object):
         # super().__del__()
         print("Explosion destroyed")
 
-    def __init__(self, x, y, fps):
-        super().__init__(x, y, image_src="Art/Explosion.png", cols=12, fps=fps)
-        explosionFX.play()
+    def __init__(self, x, y, fps, type=Animation['NORMAL']):
+        if type==Animation['NORMAL']:
+            super().__init__(x, y, image_src="Art/Explosion.png", cols=12, fps=fps)
+            explosionFX.play()
+        elif type==Animation['SPLASH']:
+            super().__init__(x, y, image_src="Art/ExplosionBlood.png", cols=16, fps=fps)
+            splashFX.play()
 
     def move(self):
         global NUM_ANIMATION_FRAMES

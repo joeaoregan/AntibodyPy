@@ -130,10 +130,10 @@ def spawnEnemy(amount=1):
             game_objects.append(enemyShip.EnemyShip())
 
 
-def spawnExplosion(x, y, fps):
+def spawnExplosion(x, y, fps, type=explosion.Animation['NORMAL']):
     # explosion1 = explosion.Explosion(x, y, fps)
     # explosionList.add(explosion1)
-    game_objects.append(explosion.Explosion(x, y, fps))  # Spawn explosion
+    game_objects.append(explosion.Explosion(x, y, fps, type))  # Spawn explosion
 
 
 def init():
@@ -184,7 +184,7 @@ def update():
                             if obstacle.active:
                                 score += 10
                             obstacle.active = False
-                            spawnExplosion(obstacle.x,obstacle.y, 10)
+                            spawnExplosion(obstacle.x,obstacle.y, 10, type=explosion.Animation['SPLASH'])
                             if obj.__class__.__name__ == "Player":
                                 obj.health -= 2
                 

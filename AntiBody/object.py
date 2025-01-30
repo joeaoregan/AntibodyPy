@@ -10,10 +10,11 @@ __date__ = '22/06/2023'
 
 import pygame
 from pygame.locals import *
+from enum import Enum
 
 WIDTH, HEIGHT = 1280, 720
 
-
+# ExplosionAnimation = Enum('ExplosionAnimation', [('NORMAL', 1), ('BLOOD', 2)])
 
 class Object(pygame.sprite.Sprite):
     DS = pygame.display.set_mode((WIDTH, HEIGHT))
