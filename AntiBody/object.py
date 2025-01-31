@@ -19,15 +19,22 @@ WIDTH, HEIGHT = 1280, 720
 class Object(pygame.sprite.Sprite):
     DS = pygame.display.set_mode((WIDTH, HEIGHT))
     width = 0
-    def __init__(self, x=0, y=0, image_src="Art/Player1Ship.png", speed=5, cols=1, rows=1, fps=1):
+    def __init__(self, x=0, y=0, image_src="Art/Player1Ship.png", speed=5, cols=1, rows=1, fps=1, type=1):
         super().__init__()
         self.x = x
         self.y = y
         self.velocityX = 0
         self.velocityY = 0
         self.health = 100
-
+        self.type = type
+        
         self.image = pygame.image.load(image_src).convert()
+        
+        if type==2:
+            pygame.transform.rotate(self.image, 30)
+        elif type==3:
+            pygame.transform.rotate(self.image, -30)
+
         self.cols = cols
         self.rows = rows
         self.totalCells = self.rows * self.cols

@@ -106,7 +106,7 @@ def handle_input():
     for obj in game_objects:
         if obj.input() == "Fire":
             # obj.fire()
-            spawnBullet(obj.x+50, obj.y + (obj.image.get_rect().height / 2))
+            spawnBullet(obj.x+50, obj.y + (obj.image.get_rect().height / 2), type=3)
 
     # if k[K_SPACE] and pygame.time.get_ticks() > bullet.NEXT_FIRE:
     #     spawnBullet(10, 360)
@@ -120,8 +120,13 @@ def handle_input():
 '''
 
 
-def spawnBullet(x, y):
-    game_objects.append(bullet.Bullet(x, y))
+def spawnBullet(x, y, type=1):
+    game_objects.append(bullet.Bullet(x, y, type))
+    if type==2:
+        game_objects.append(bullet.Bullet(x, y, 3))
+    if type==3:
+        game_objects.append(bullet.Bullet(x, y, 1))
+        game_objects.append(bullet.Bullet(x, y, 2))
 
 
 def spawnEnemy(amount=1):
