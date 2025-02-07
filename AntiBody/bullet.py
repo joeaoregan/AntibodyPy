@@ -25,13 +25,22 @@ class Bullet(object.Object):
         # super().__del__()
         print("Bullet destroyed")
 
-    def __init__(self, x, y, type=1):        
-        super(Bullet, self).__init__(x, y, image_src="Art/LaserGreen2.png", type=type)
-        self.type = type
+    def __init__(self, x, y, type=1):
+        self.type = type   
+        self.direction = 1        
+        image = "Art/LaserGreen2.png"
+        
+        if self.type == 4:
+            self.direction = -1
+            image = "Art/LaserBlue.png"
+
+        super(Bullet, self).__init__(x, y, image_src=image, type=type)
         #if type==2:
         #    pygame.transform.rotate(self.image, 30)
         #elif type==3:
         #    pygame.transform.rotate(self.image, -30)
+
+
         laserFX.play()
         if type == 2:
             self.angle = 10
@@ -50,7 +59,7 @@ class Bullet(object.Object):
     def move(self):
         # global active, x
         if self.active:
-            self.x += 10
+            self.x += (10 * self.direction)
 
             #if self.type == 1:
 

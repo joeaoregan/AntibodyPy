@@ -14,6 +14,10 @@ import random
 
 import object
 
+laserEnemyFX = pygame.mixer.Sound('Audio/LaserEnemy.wav')
+
+ATTACK_RATE = 1000
+WIDTH, HEIGHT = 1280, 720
 
 # class EnemyShip(pygame.sprite.Sprite):
 class EnemyShip(object.Object):
@@ -29,6 +33,8 @@ class EnemyShip(object.Object):
         
         self.x = int(1280 + random.randrange(100,1000,75))
         self.y = random.randint(40, 600-self.height)
+
+        self.nextFire = 0
         
         EnemyShip.count += 1
         print("Enemy Ship Count: ", EnemyShip.count)
@@ -50,6 +56,12 @@ class EnemyShip(object.Object):
             if self.currentFrame > (self.totalCells-1):
                 self.currentFrame = 0
 
+        if (self.x > 0) and (self.x + self.width < WIDTH):
+            self.attack = False
+            if pygame.time.get_ticks() > self.nextFire:
+                self.nextFire = pygame.time.get_ticks() + ATTACK_RATE
+                self.attack = True
+
             
     def draw(self):
         if (self.active):
@@ -61,3 +73,4 @@ class EnemyShip(object.Object):
 
 # enemyList = pygame.sprite.Group()
 # enemySpriteSheet = ss.SpriteSheet("Art/EnemySpriteSheet2.png", 1, 4)    # Params: filename, cols, rows
+3

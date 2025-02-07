@@ -107,6 +107,10 @@ def handle_input():
         if obj.input() == "Fire":
             # obj.fire()
             spawnBullet(obj.x+50, obj.y + (obj.image.get_rect().height / 2), type=3)
+        if obj.attack == True:
+            # print("Enemey Fire")
+            spawnBullet(obj.x-20, obj.y+10, type=4)
+
 
     # if k[K_SPACE] and pygame.time.get_ticks() > bullet.NEXT_FIRE:
     #     spawnBullet(10, 360)
@@ -199,7 +203,7 @@ def update():
                             obj.health-=5
                             obstacle.active = False
                             spawnExplosion(obstacle.x,obstacle.y, 10)
-                    if obj.__class__.__name__ == "Bullet":
+                    if obj.__class__.__name__ == "Bullet" and obj.type != 4:
                         if obj.collision(obstacle.get_rect()):
                             score += 10
                             obstacle.active = False   

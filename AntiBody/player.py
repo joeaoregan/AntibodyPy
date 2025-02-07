@@ -13,11 +13,10 @@ from pygame.locals import *
 import object
 
 SPEED = 5
-
 WIDTH, HEIGHT = 1280, 720
+ATTACK_RATE = 200
 #DS = pygame.display.set_mode((WIDTH, HEIGHT))
 #playerImage = pygame.image.load("Art/Player1Ship.png").convert()
-
 
 class Player(object.Object):
     def __init__(self, x=200, y=HEIGHT/2):
@@ -47,7 +46,7 @@ class Player(object.Object):
         if k[K_SPACE] and pygame.time.get_ticks() > self.nextFire:
             # print("Fire!!!")
             # self.fire()
-            self.nextFire = pygame.time.get_ticks() + 200
+            self.nextFire = pygame.time.get_ticks() + ATTACK_RATE
             return "Fire"
 
         return None
@@ -73,18 +72,16 @@ class Player(object.Object):
         pygame.draw.rect(object.Object.DS, (0,0,0,255), Rect(self.x-1,self.y-11,102,12))
         pygame.draw.rect(object.Object.DS, (255,0,0,255), Rect(self.x,self.y-10,100,10))
         pygame.draw.rect(object.Object.DS, (0,255,0,255), Rect(self.x,self.y-10,self.health,10))
-        
 
     def get_width(self):
         return super().get_width()
 
     def fire(self):
-        print("fire!!!")
+        # print("fire!!!")
         self.nextFire = pygame.time.get_ticks() + 200
 
     def collision(self, rect):
         # print("Player", rect)
-        # return False
         if self.x < rect.left + rect.width and self.x + self.width > rect.left and self.y < rect.top + rect.height and self.y + self.height > rect.top:
             self.explosion = True
             self.active = False

@@ -27,6 +27,7 @@ class Object(pygame.sprite.Sprite):
         self.velocityY = 0
         self.health = 100
         self.type = type
+        self.attack = False
         
         self.image = pygame.image.load(image_src).convert()
         
@@ -78,6 +79,9 @@ class Object(pygame.sprite.Sprite):
 
     def get_rect(self):
         return self.image.get_rect(center=(self.x, self.y))
+    
+    def attack(self):
+        return self.attack
 
     @staticmethod
     def get_width():
