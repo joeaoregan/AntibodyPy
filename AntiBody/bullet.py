@@ -79,7 +79,8 @@ class Bullet(object.Object):
 
     def draw(self):
         #super().draw()
-        object.Object.DS.blit(pygame.transform.rotate(self.image, self.angle), (self.x, self.y))
+        if (self.active):
+            object.Object.DS.blit(pygame.transform.rotate(self.image, self.angle), (self.x, self.y))
 
 # bulletList = pygame.sprite.Group()
 # laserImage = pygame.image.load("Art/LaserGreen2.png").convert()
