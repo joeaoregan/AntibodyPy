@@ -8,11 +8,13 @@
 
 ### Setup:
 
-## PyCharm:
+## VS Code:
 
 ```
 pip install pygame
 ```
+
+## PyCharm:
 
 ```
 File > Settings > Project > Python Interpreter
