@@ -1,5 +1,7 @@
 # AntibodyPy
+
 ## Python version of Antibody C++ game using pygame
+
 ### Joe O'Regan
 
 ---
@@ -11,8 +13,10 @@
 ```
 File > Settings > Project > Python Interpreter
 ```
+
 Select + to add new library
 search for "pygame"
+
 ```
 Install Package
 ```
@@ -37,10 +41,25 @@ Antibody game ported to python from C++
 
 #### Tests
 
-* [Antibody: Split Screen Race Test](https://github.com/joeaoregan/LIT-Yr3-Project-Antibody/tree/master/Split-Screen%20Race%20Mode "Antibody: Split Screen Test")
+- [Antibody: Split Screen Race Test](https://github.com/joeaoregan/LIT-Yr3-Project-Antibody/tree/master/Split-Screen%20Race%20Mode "Antibody: Split Screen Test")
+
+---
+
+## Screenshots
+
+<details closed>
+<summary>
+<img src="https://raw.githubusercontent.com/joeaoregan/AntibodyPy/master/Screenshots/screenshot1.jpg" title="AntibodyPy" height="100"/>
+<img src="https://raw.githubusercontent.com/joeaoregan/AntibodyPy/master/Screenshots/screenshot2.jpg" title="AntibodyPy: Pause" height="100"/>
+<p>Click here for larger images, or individual thumbnails to go to raw images.</p>
+</summary>
 
 ![AntibodyPy](https://raw.githubusercontent.com/joeaoregan/AntibodyPy/master/Screenshots/screenshot1.jpg "AntibodyPy")
+
 ###### AntybodyPy
 
 ![AntibodyPy: Pause](https://raw.githubusercontent.com/joeaoregan/AntibodyPy/master/Screenshots/screenshot2.jpg "AntibodyPy: Pause")
+
 ###### AntybodyPy - Pause
+
+</details>
