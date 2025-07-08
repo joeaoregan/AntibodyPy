@@ -11,6 +11,10 @@
 ## PyCharm:
 
 ```
+pip install pygame
+```
+
+```
 File > Settings > Project > Python Interpreter
 ```
 
